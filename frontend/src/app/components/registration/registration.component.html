@@ -1,0 +1,60 @@
+<div class="form-container">
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
+    <h2>User Registration</h2>
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" formControlName="name" placeholder="Enter your name" [class.error]="name?.invalid && name?.touched">
+      <div class="error-message" *ngIf="name?.invalid && name?.touched">Name is required</div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" formControlName="email" placeholder="Enter your email" [class.error]="email?.invalid && email?.touched">
+      <div class="error-message" *ngIf="email?.invalid && email?.touched">
+        <span *ngIf="email?.errors?.['required']">Email is required</span>
+        <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+      </div>
+      <button type="button" (click)="sendOtp()" [disabled]="otpSent" class="otp-btn btn btn-info my-2">Send OTP</button>
+    </div>
+
+    <div class="form-group" *ngIf="otpSent">
+      <label for="otp">Enter OTP</label>
+      <input type="text" id="otp" formControlName="otp" placeholder="Enter the OTP" [class.error]="otp?.invalid && otp?.touched">
+      <div class="error-message" *ngIf="otp?.invalid && otp?.touched">
+        <span *ngIf="otp?.errors?.['required']">OTP is required</span>
+        <span *ngIf="otp?.errors?.['invalidOtp']">Invalid OTP</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <div class="password-input-container">
+        <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" placeholder="Enter your password" [class.error]="password?.invalid && password?.touched">
+        <button type="button" class="toggle-password" (click)="togglePasswordVisibility('password')">
+          {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+        </button>
+      </div>
+      <div class="error-message" *ngIf="password?.invalid && password?.touched">
+        <span *ngIf="password?.errors?.['required']">Password is required</span>
+        <span *ngIf="password?.errors?.['minlength']">Password must be at least 8 characters</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <div class="password-input-container">
+        <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirm your password" [class.error]="(confirmPassword?.invalid || !passwordsMatch()) && confirmPassword?.touched">
+        <button type="button" class="toggle-password" (click)="togglePasswordVisibility('confirmPassword')">
+          {{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}
+        </button>
+      </div>
+      <div class="error-message" *ngIf="(confirmPassword?.invalid || !passwordsMatch()) && confirmPassword?.touched">
+        <span *ngIf="confirmPassword?.errors?.['required']">Please confirm your password</span>
+        <span *ngIf="confirmPassword?.errors?.['passwordMismatch'] || !passwordsMatch()">Passwords do not match</span>
+      </div>
+    </div>
+
+    <button class="register-btn" type="submit" [disabled]="registrationForm.invalid || !passwordsMatch()">Register</button>
+  </form>
+</div>
