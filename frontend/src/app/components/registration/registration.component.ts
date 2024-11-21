@@ -133,12 +133,13 @@ interface OtpRequest {
       }
       .toggle-password {
         position: absolute;
-        right: 10px;
+        right: 0px;
         top: 50%;
         transform: translateY(-50%);
         background: none;
         border: none;
         cursor: pointer;
+        width: 15%;
       }
       input {
         width: 100%;
