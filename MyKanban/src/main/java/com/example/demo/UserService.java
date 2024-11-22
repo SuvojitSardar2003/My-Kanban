@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.OtpRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.dto.ResetPasswordRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 import com.example.demo.service.EmailService;
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class UserService {
@@ -23,9 +25,11 @@ public class UserService {
     
     @Autowired
     private EmailService emailService;
+    
 
-    public String registerUser(User user) {
-    	Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+    public String registerUser(RegisterRequest registerRequest) {
+        // Check if user already exists
+        Optional<User> existingUser = userRepository.findByEmail(registerRequest.getEmail());
         if (existingUser.isPresent()) {
             User existing = existingUser.get();
             if (existing.isEnabled()) {
@@ -34,8 +38,13 @@ public class UserService {
                 return "User already exists but not verified";
             }
         }
+        
+        // Create new user
+        User user = new User();
+        user.setName(registerRequest.getName());
+        user.setEmail(registerRequest.getEmail());
         // Encode password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEnabled(false);
         userRepository.save(user);
         
@@ -43,13 +52,14 @@ public class UserService {
         return sendOtp(user.getEmail());
     }
 
-    public String loginUser(LoginRequest loginRequest) {
+    public String loginUser(LoginRequest loginRequest, HttpSession session) {
         Optional<User> userOpt = userRepository.findByEmail(loginRequest.getEmail());
         if (userOpt.isEmpty()) {
             return "User not found";
         }
         
         User user = userOpt.get();
+        
         if (!user.isEnabled()) {
             return "Please verify your email first";
         }
@@ -58,6 +68,11 @@ public class UserService {
             return "Invalid password";
         }
         
+        // Store user details in session 
+        session.setAttribute("userId", user.getId());
+        session.setAttribute("userName", user.getName()); 
+        session.setAttribute("userEmail", user.getEmail());
+       
         return "Login successful!";
     }
 

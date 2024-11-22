@@ -1,11 +1,15 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.OtpRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.dto.ResetPasswordRequest;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/user")
@@ -15,12 +19,12 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody User user) {
-        return userService.registerUser(user);
+    public String registerUser(@RequestBody RegisterRequest registerRequest) {
+        return userService.registerUser(registerRequest);
     }
-    @PostMapping("/login")
-    public String loginUser(@RequestBody LoginRequest loginRequest) {
-        return userService.loginUser(loginRequest);
+    @PostMapping("/login") 
+    public String loginUser(@RequestBody LoginRequest loginRequest, HttpSession session) { 
+    	return userService.loginUser(loginRequest, session); 
     }
 
     @PostMapping("/sendOtp")
@@ -42,18 +46,5 @@ public class UserController {
     public String resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
         return userService.resetPassword(resetPasswordRequest);
     }
-//    @PostMapping("/login")
-//    public String loginUser(@RequestParam String email, @RequestParam String password) {
-//        return userService.loginUser(email, password);
-//    }
-//
-//    @PostMapping("/sendOtp")
-//    public String sendOtp(@RequestParam String email) {
-//        return userService.sendOtp(email);
-//    }
-//
-//    @PostMapping("/verifyOtp")
-//    public String verifyOtp(@RequestParam String email, @RequestParam String otp) {
-//        return userService.verifyOtp(email, otp);
-//    }
+
 }
