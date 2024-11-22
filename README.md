@@ -10,7 +10,7 @@ Simple Kanban Board for Task Management. Create a Kanban board for individual an
 - [Additional Information]
 
 # Introduction
-This project is a Kanban Flow application split into backend and frontend sections. The backend is developed using Spring Boot, while the frontend is built using Angular.
+This project is a Kanban Flow application split into backend(MyKanban folder name) and frontend sections. The backend is developed using Spring Boot, while the frontend is built using Angular.
 
 # Prerequisites
 Before you begin, ensure you have the following installed on your local machine:
@@ -24,7 +24,8 @@ Before you begin, ensure you have the following installed on your local machine:
 1. **Clone the Repository**:
    
     git clone https://github.com/SpringBoardMentor115/Kanban_Flow_Infosys_Internship_Oct2024.git
-    cd kanban-flow/backend
+
+    cd kanban-flow/MyKanban
     
 
 2. **Configure Database**:
@@ -39,11 +40,25 @@ Before you begin, ensure you have the following installed on your local machine:
 3. **Build the Backend**:
     
     mvn clean install
+
+    If using STS : 
+
+    Open the MyKanban folder in STS as a Workspace.
+    Click on the Import Project.
+    Select Import Maven Project.
+    Browse to the MyKanban folder and select it. 
+
    
 
 4. **Run the Backend**:
     
     mvn spring-boot:run
+
+    If using STS : 
+
+    Open MyKanbanApplication.java file.
+    Click RunAs 
+    Select Spring Boot App. 
     
 
 ## Frontend Setup
@@ -66,9 +81,10 @@ Before you begin, ensure you have the following installed on your local machine:
 # Running the Project
 
 ## Start Backend
-Ensure your backend is running by navigating to the `backend` directory and using Maven to run the Spring Boot application:
+Ensure your backend is running by navigating to the `MyKanban` directory and using Maven to run the Spring Boot application:
 
-cd backend
+cd MyKanban
+
 mvn spring-boot:run
 
 ## Run the Frontend
