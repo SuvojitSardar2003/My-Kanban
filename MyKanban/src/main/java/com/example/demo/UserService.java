@@ -4,8 +4,11 @@ import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.OtpRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.dto.ResetPasswordRequest;
+import com.example.demo.dto.LoginResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -52,28 +55,37 @@ public class UserService {
         return sendOtp(user.getEmail());
     }
 
-    public String loginUser(LoginRequest loginRequest, HttpSession session) {
+  
+    public ResponseEntity<LoginResponse> loginUser(LoginRequest loginRequest, HttpSession session) {
         Optional<User> userOpt = userRepository.findByEmail(loginRequest.getEmail());
         if (userOpt.isEmpty()) {
-            return "User not found";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new LoginResponse("User not found", null, null));
         }
-        
+
         User user = userOpt.get();
-        
+
         if (!user.isEnabled()) {
-            return "Please verify your email first";
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new LoginResponse("Please verify your email first", null, null));
         }
-        
+
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return "Invalid password";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new LoginResponse("Invalid password", null, null));
         }
-        
-        // Store user details in session 
+
+        // Store user details in session
         session.setAttribute("userId", user.getId());
-        session.setAttribute("userName", user.getName()); 
+        session.setAttribute("userName", user.getName());
         session.setAttribute("userEmail", user.getEmail());
-       
-        return "Login successful!";
+
+        // Return a response with user details
+        return ResponseEntity.ok(new LoginResponse(
+            "Login successful!", 
+            user.getId(), 
+            user.getName()
+        ));
     }
 
     public String sendOtp(OtpRequest otpRequest) {

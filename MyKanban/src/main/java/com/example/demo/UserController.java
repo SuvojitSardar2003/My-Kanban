@@ -1,18 +1,22 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.LoginResponse;
 import com.example.demo.dto.OtpRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.dto.ResetPasswordRequest;
+import com.example.demo.dto.UserProfileDTO;
+import com.example.demo.service.UserProfileService;
 
 import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class UserController {
 
     @Autowired
@@ -23,7 +27,7 @@ public class UserController {
         return userService.registerUser(registerRequest);
     }
     @PostMapping("/login") 
-    public String loginUser(@RequestBody LoginRequest loginRequest, HttpSession session) { 
+    public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest loginRequest, HttpSession session) { 
     	return userService.loginUser(loginRequest, session); 
     }
 
@@ -46,5 +50,12 @@ public class UserController {
     public String resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
         return userService.resetPassword(resetPasswordRequest);
     }
+    @Autowired
+    private UserProfileService userProfileService;
 
+    @GetMapping("/profile")
+    public UserProfileDTO getUserProfile(HttpSession session) {
+        return userProfileService.getUserProfile(session); // Use the service instance
+    }
+    
 }
