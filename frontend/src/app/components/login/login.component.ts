@@ -1,8 +1,10 @@
+// login.component.ts
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +31,7 @@ export class LoginComponent {
   private http = inject(HttpClient);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private sessionService = inject(SessionService);
 
   constructor() {
     this.otpForm = this.fb.group({
@@ -43,17 +46,28 @@ export class LoginComponent {
         email: this.userobj.username,
         password: this.userobj.password
       };
-
-      this.http.post(`${this.baseUrl}/login`, loginRequest, { responseType: 'text' }).subscribe({
+  
+      
+      this.http.post<{
+        message: string, 
+        userId: number, 
+        userName: string
+      }>(`${this.baseUrl}/login`, loginRequest).subscribe({
         next: (response) => {
           console.log('Login response:', response);
-          if (response.includes('verify your email')) {
+          if (response.message.includes('verify your email')) {
             this.isOtpVerificationRequired = true;
             this.resendOtp(); // Automatically send OTP when verification is required
-          } else if (response === 'Login successful!') {
-            this.router.navigate(['/My-Kanban']);
+          } else if (response.message === 'Login successful!') {
+            // Store the session with all three pieces of information
+            this.sessionService.setSession({ 
+              email: this.userobj.username,
+              userId: response.userId,
+              userName: response.userName
+            }); 
+            this.router.navigate(['/profile']);
           } else {
-            alert(response);
+            alert(response.message);
           }
         },
         error: (error) => {
