@@ -4,23 +4,31 @@
     <p class="pm">Menu</p>
     <ul class="menu-list">
         <li class="menu-item">
-            <span class="icon material-icons">dashboard</span>
-            Task Board
+            <a routerLink="/task-board" routerLinkActive="active">
+                <span class="icon material-icons">dashboard</span>
+                Task Board
+            </a>
         </li>
         <li class="menu-item">
-            <span class="icon material-icons">task</span>
-            My Tasks
+            <a routerLink="/my-tasks" routerLinkActive="active">
+                <span class="icon material-icons">task</span>
+                My Tasks
+            </a>
         </li>
         <li class="menu-item">
-            <span class="icon material-icons">groups</span>
-            My Project Teams
+            <a routerLink="/my-project-teams" routerLinkActive="active">
+                <span class="icon material-icons">groups</span>
+                My Project Teams
+            </a>
         </li>
         <li class="menu-item">
-            <span class="icon material-icons">account_circle</span>
-            <a routerLink="/profile" routerLinkActive="active">Profile</a>
+            <a routerLink="/profile" routerLinkActive="active">
+                <span class="icon material-icons">account_circle</span>
+                Profile
+            </a>
         </li>
     </ul>
     <div class="addbtn">
-        <button type="button"  id="tedit" (click)="onLogout()">LOGOUT</button>
+        <button type="button" id="tedit" (click)="onLogout()">LOGOUT</button>
     </div>
 </div>
