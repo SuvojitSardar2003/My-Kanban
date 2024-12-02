@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +11,7 @@ import com.example.demo.dto.RegisterRequest;
 import com.example.demo.dto.ResetPasswordRequest;
 import com.example.demo.dto.UserProfileDTO;
 import com.example.demo.service.UserProfileService;
+import com.example.demo.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 

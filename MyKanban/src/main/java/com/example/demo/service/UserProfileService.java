@@ -4,9 +4,11 @@ package com.example.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpSession;
-import com.example.demo.TaskRepository;
-import com.example.demo.TeamMemberRepository;
+
 import com.example.demo.dto.UserProfileDTO;
+import com.example.demo.repository.ProjectTeamRepository;
+import com.example.demo.repository.TaskRepository;
+import com.example.demo.repository.TeamMemberRepository;
 
 @Service
 public class UserProfileService {
@@ -16,6 +18,9 @@ public class UserProfileService {
 
     @Autowired
     private TaskRepository taskRepository;
+    
+    @Autowired
+    private ProjectTeamRepository projectTeamRepository;
 
     public UserProfileDTO getUserProfile(HttpSession session) {
         // Retrieve the userId from the session
@@ -24,18 +29,19 @@ public class UserProfileService {
             throw new IllegalArgumentException("User is not logged in");
         }
 
-        // Retrieve the user from the session
+        // Retrieve the user details from the session
         String email = (String) session.getAttribute("userEmail");
         String name = (String) session.getAttribute("userName");
 
         // Retrieve the total projects
         long totalProjects = teamMemberRepository.countByUserId(userId);
+               
 
         // Retrieve the total tasks
         long totalTasks = taskRepository.countByAssignedToId(userId);
 
         // Retrieve the total active and done tasks
-        long totalActiveTasks = taskRepository.countByAssignedToIdAndStatus(userId, "IN_PROGRESS");
+        long totalActiveTasks = taskRepository.countByAssignedToIdAndStatus(userId, "Active");
         long totalDoneTasks = taskRepository.countByAssignedToIdAndStatus(userId, "DONE");
 
         // Return the aggregated profile data

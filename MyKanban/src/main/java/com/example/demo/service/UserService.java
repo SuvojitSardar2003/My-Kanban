@@ -1,9 +1,11 @@
-package com.example.demo;
+package com.example.demo.service;
 
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.OtpRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.dto.ResetPasswordRequest;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.dto.LoginResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
-import com.example.demo.service.EmailService;
+
 import jakarta.servlet.http.HttpSession;
 
 @Service
