@@ -1,0 +1,19 @@
+mat-form-field {
+    display: block;
+    margin-bottom: 20px;
+  }
+  
+  mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .scrollable-content {
+    overflow-x: auto;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
