@@ -5,6 +5,8 @@ import { RouterOutlet } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserProfileDTO } from './user-profile.dto';
 import { SessionService } from '../../services/session.service';
+import { Router } from '@angular/router'; // Import Router
+
 
 @Component({
   selector: 'app-profile',
@@ -25,6 +27,8 @@ export class ProfileComponent implements OnInit {
 
   private http = inject(HttpClient);
   private sessionService = inject(SessionService);
+  private router = inject(Router); // Inject Router
+
 
   ngOnInit(): void {
     this.loadUserProfile();
@@ -46,13 +50,16 @@ export class ProfileComponent implements OnInit {
           console.error('Error fetching profile', err);
           
           if (err.status === 401) {
-            
+            this.router.navigate(['/login']);
+
           }
         }
       });
     } else {
       console.error('User is not logged in');
-      
+
+      this.router.navigate(['/login']);
+
     }
   }
 }
