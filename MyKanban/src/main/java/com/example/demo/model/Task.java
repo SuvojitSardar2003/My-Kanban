@@ -12,8 +12,8 @@ public class Task {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "task_column_id", nullable = false)
-    private TaskColumn taskColumn;
+    @JoinColumn(name = "project_id", nullable = false)
+    private ProjectTeam project;
 
     @ManyToOne
     @JoinColumn(name = "assigned_to", nullable = true)
@@ -40,13 +40,19 @@ public class Task {
     @Column(name = "updated_at", nullable = true)
     private LocalDateTime updatedAt;
 
+    @Column(name = "category")
+    private String category;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
     // Default Constructor
     public Task() {
     }
 
     // Parameterized Constructor
-    public Task(TaskColumn taskColumn, User assignedTo, String title, String status, LocalDateTime dueDate, String priority, User createdBy, LocalDateTime createdAt) {
-        this.taskColumn = taskColumn;
+    public Task(ProjectTeam project, User assignedTo, String title, String status, LocalDateTime dueDate, String priority, User createdBy, LocalDateTime createdAt, String category, String description) {
+        this.project = project;
         this.assignedTo = assignedTo;
         this.title = title;
         this.status = status;
@@ -55,6 +61,8 @@ public class Task {
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.updatedAt = null;
+        this.category = category;
+        this.description = description;
     }
 
     // Getters and Setters
@@ -66,12 +74,12 @@ public class Task {
         this.id = id;
     }
 
-    public TaskColumn getTaskColumn() {
-        return taskColumn;
+    public ProjectTeam getProject() {
+        return project;
     }
 
-    public void setTaskColumn(TaskColumn taskColumn) {
-        this.taskColumn = taskColumn;
+    public void setProject(ProjectTeam project) {
+        this.project = project;
     }
 
     public User getAssignedTo() {
@@ -138,6 +146,22 @@ public class Task {
         this.updatedAt = updatedAt;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     // Utility Methods
     public void markAsDone() {
         this.status = "DONE";
@@ -160,6 +184,8 @@ public class Task {
                 ", priority='" + priority + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

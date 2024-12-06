@@ -38,8 +38,8 @@ public class ProjectTeam {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy; // Foreign key to the User table
 
-    @OneToMany(mappedBy = "projectTeam", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TaskBoard> taskBoards = new ArrayList<>();
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "projectTeam", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeamMember> teamMembers = new ArrayList<>();
@@ -131,12 +131,12 @@ public class ProjectTeam {
         this.createdBy = createdBy;
     }
 
-    public List<TaskBoard> getTaskBoards() {
-        return taskBoards;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
-    public void setTaskBoards(List<TaskBoard> taskBoards) {
-        this.taskBoards = taskBoards;
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public List<TeamMember> getTeamMembers() {
@@ -148,14 +148,14 @@ public class ProjectTeam {
     }
 
     // Utility Methods
-    public void addTaskBoard(TaskBoard taskBoard) {
-        taskBoards.add(taskBoard);
-        taskBoard.setProjectTeam(this);
+    public void addTask(Task task) {
+        tasks.add(task);
+        task.setProject(this);
     }
 
-    public void removeTaskBoard(TaskBoard taskBoard) {
-        taskBoards.remove(taskBoard);
-        taskBoard.setProjectTeam(null);
+    public void removeTask(Task task) {
+        tasks.remove(task);
+        task.setProject(null);
     }
 
     public void addTeamMember(TeamMember teamMember) {
