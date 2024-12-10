@@ -25,4 +25,8 @@ export class SidebarComponent {
       this.router.navigate(['/login']);
     }
   }
+
+  isCurrentRoute(route: string): boolean {
+    return this.router.url === route;
+  }
 }
