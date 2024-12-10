@@ -34,4 +34,22 @@ public class TaskController {
         TaskDTO taskDTO = taskService.convertToDTO(createdTask);
         return ResponseEntity.status(201).body(taskDTO);
     }
+
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskDTO> updateTask(
+            @PathVariable Long id,
+            @RequestBody TaskDTO taskDTO,
+            HttpSession session) {
+        Long loggedInUserId = (Long) session.getAttribute("userId");
+        if (loggedInUserId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        TaskDTO updatedTask = taskService.updateTask(id, taskDTO, loggedInUserId);
+        return ResponseEntity.ok(updatedTask);
+    }
 }

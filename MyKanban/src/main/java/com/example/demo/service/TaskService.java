@@ -31,22 +31,18 @@ public class TaskService {
 
     @Transactional
     public Task createTask(TaskCreateDTO taskCreateDTO, Long createdByUserId) {
-        // Fetch the user who is creating the task
         User createdBy = userRepository.findById(createdByUserId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + createdByUserId));
 
-        // Fetch the project the task belongs to
         ProjectTeam project = projectTeamRepository.findById(taskCreateDTO.getProjectId())
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+                .orElseThrow(() -> new RuntimeException("Project not found with ID: " + taskCreateDTO.getProjectId()));
 
-        // Fetch the user the task is assigned to, if any
         User assignedTo = null;
         if (taskCreateDTO.getAssignedToId() != null) {
             assignedTo = userRepository.findById(taskCreateDTO.getAssignedToId())
-                    .orElseThrow(() -> new RuntimeException("Assigned user not found"));
+                    .orElseThrow(() -> new RuntimeException("Assigned user not found with ID: " + taskCreateDTO.getAssignedToId()));
         }
 
-        // Create a new Task entity
         Task task = new Task(
                 project,
                 assignedTo,
@@ -60,8 +56,60 @@ public class TaskService {
                 taskCreateDTO.getDescription()
         );
 
-        // Save the task in the database
+        logger.info("Creating task: {}", task.getTitle());
         return taskRepository.save(task);
+    }
+
+    @Transactional
+    public TaskDTO updateTask(Long taskId, TaskDTO taskDTO, Long updatedByUserId) {
+        User updatedBy = userRepository.findById(updatedByUserId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + updatedByUserId));
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found with ID: " + taskId));
+
+        if (taskDTO.getProjectId() != null) {
+            ProjectTeam project = projectTeamRepository.findById(taskDTO.getProjectId())
+                    .orElseThrow(() -> new RuntimeException("Project not found with ID: " + taskDTO.getProjectId()));
+            task.setProject(project);
+        }
+
+        if (taskDTO.getAssignedToId() != null) {
+            User assignedTo = userRepository.findById(taskDTO.getAssignedToId())
+                    .orElseThrow(() -> new RuntimeException("Assigned user not found with ID: " + taskDTO.getAssignedToId()));
+            task.setAssignedTo(assignedTo);
+        }
+
+        if (taskDTO.getTitle() != null && !taskDTO.getTitle().isEmpty()) {
+            task.setTitle(taskDTO.getTitle());
+        }
+
+        if (taskDTO.getStatus() != null && !taskDTO.getStatus().isEmpty()) {
+            task.setStatus(taskDTO.getStatus());
+        }
+
+        if (taskDTO.getDueDate() != null) {
+            task.setDueDate(taskDTO.getDueDate());
+        }
+
+        if (taskDTO.getPriority() != null && !taskDTO.getPriority().isEmpty()) {
+            task.setPriority(taskDTO.getPriority());
+        }
+
+        if (taskDTO.getCategory() != null) {
+            task.setCategory(taskDTO.getCategory());
+        }
+
+        if (taskDTO.getDescription() != null) {
+            task.setDescription(taskDTO.getDescription());
+        }
+
+        task.setUpdatedAt(LocalDateTime.now());
+
+        Task updatedTask = taskRepository.save(task);
+        logger.info("Updated task with ID: {}", taskId);
+
+        return convertToDTO(updatedTask);
     }
 
     public TaskDTO convertToDTO(Task task) {
@@ -76,15 +124,12 @@ public class TaskService {
         taskDTO.setCreatedAt(task.getCreatedAt());
         taskDTO.setUpdatedAt(task.getUpdatedAt());
 
-        // Set project details
         taskDTO.setProjectId(task.getProject().getId());
 
-        // Set assigned user details
         if (task.getAssignedTo() != null) {
             taskDTO.setAssignedToId(task.getAssignedTo().getId());
         }
 
-        // Set creator details
         taskDTO.setCreatedBy(task.getCreatedBy().getId());
 
         return taskDTO;
