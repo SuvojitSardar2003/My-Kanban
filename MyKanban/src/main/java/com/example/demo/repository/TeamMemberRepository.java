@@ -16,16 +16,15 @@ import java.util.List;
 @Repository
 public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
     
-
-	List<TeamMember> findByUserId(Long userId);
-	TeamMember findByIdAndProjectId(Long id, Long projectId);
-	
-	boolean existsByProjectAndUser(ProjectTeam project, User user);
-	
-	long countByUserId(Long userId);
-
-	List<TeamMember> findByProjectId(Long projectId);
+    List<TeamMember> findByUser_Id(Long userId);
+    TeamMember findByIdAndProject_Id(Long id, Long projectId);
     
+    boolean existsByProjectAndUser(ProjectTeam project, User user);
+    
+    long countByUser_Id(Long userId); // Updated to use underscore notation
+
+    List<TeamMember> findByProject_Id(Long projectId); // Updated to use underscore notation
+
     @Transactional
     @Modifying
     @Query("DELETE FROM TeamMember tm WHERE tm.project.id = :projectId")

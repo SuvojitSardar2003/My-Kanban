@@ -1,11 +1,10 @@
 package com.example.demo.dto;
 
-
 public class TeamMemberDTO {
 
     private Long id;
     private String email;
-    
+    private Long userId; // Only keep userId, not the whole User object
 
     // Getters and Setters
     public Long getId() {
@@ -24,5 +23,11 @@ public class TeamMemberDTO {
         this.email = email;
     }
 
-}
+    public Long getUserId() {
+        return userId;
+    }
 
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+}

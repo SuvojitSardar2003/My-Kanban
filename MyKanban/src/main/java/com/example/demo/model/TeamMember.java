@@ -74,7 +74,19 @@ public class TeamMember {
     public void setUser(User user) {
         this.user = user;
     }
-
+    
+ // Add this method to get the userId 
+    public Long getUserId() { 
+    	return user != null ? user.getId() : null; 
+    	}
+    
+    // Add this method to set the userId 
+    public void setUserId(Long userId) {
+    	if (this.user == null) { 
+    		this.user = new User();
+    		} 
+    	this.user.setId(userId);
+    	}
     public String getEmail() {
         return email;
     }

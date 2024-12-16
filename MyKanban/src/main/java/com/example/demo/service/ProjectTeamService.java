@@ -34,32 +34,35 @@ public class ProjectTeamService {
     private UserRepository userRepository;
     
     public ProjectTeamDTO convertToDTO(ProjectTeam projectTeam) {
-            ProjectTeamDTO projectTeamDTO = new ProjectTeamDTO();
-            projectTeamDTO.setId(projectTeam.getId());
-            projectTeamDTO.setName(projectTeam.getName());
-            projectTeamDTO.setDescription(projectTeam.getDescription());
-            projectTeamDTO.setStartDate(projectTeam.getStartDate());
-            projectTeamDTO.setEndDate(projectTeam.getEndDate());
+        ProjectTeamDTO projectTeamDTO = new ProjectTeamDTO();
+        projectTeamDTO.setId(projectTeam.getId());
+        projectTeamDTO.setName(projectTeam.getName());
+        projectTeamDTO.setDescription(projectTeam.getDescription());
+        projectTeamDTO.setStartDate(projectTeam.getStartDate());
+        projectTeamDTO.setEndDate(projectTeam.getEndDate());
 
-            // Set adminName
-            User createdBy = projectTeam.getCreatedBy();
-            if (createdBy != null) {
-                projectTeamDTO.setAdminName(createdBy.getName());
-            }
+        // Set adminName
+        User createdBy = projectTeam.getCreatedBy();
+        if (createdBy != null) {
+            projectTeamDTO.setAdminName(createdBy.getName());
+        }
 
-            // Set team members
-            List<TeamMember> teamMembers = teamMemberRepository.findByProjectId(projectTeam.getId());
-            List<TeamMemberDTO> teamMemberDTOs = new ArrayList<>();
-            for (TeamMember teamMember : teamMembers) {
-                TeamMemberDTO teamMemberDTO = new TeamMemberDTO();
-                teamMemberDTO.setId(teamMember.getId());
-                teamMemberDTO.setEmail(teamMember.getEmail());
-                teamMemberDTOs.add(teamMemberDTO);
-            }
-            projectTeamDTO.setTeamMembers(teamMemberDTOs);
+        // Set team members
+        List<TeamMember> teamMembers = teamMemberRepository.findByProject_Id(projectTeam.getId());
+        List<TeamMemberDTO> teamMemberDTOs = new ArrayList<>();
+        for (TeamMember teamMember : teamMembers) {
+            TeamMemberDTO teamMemberDTO = new TeamMemberDTO();
+            teamMemberDTO.setId(teamMember.getId());
+            teamMemberDTO.setEmail(teamMember.getEmail());
+            // Set the userId
+            teamMemberDTO.setUserId(teamMember.getUserId());
+            teamMemberDTOs.add(teamMemberDTO);
+        }
+        projectTeamDTO.setTeamMembers(teamMemberDTOs);
 
-            return projectTeamDTO;
-       }
+        return projectTeamDTO;
+    }
+
     public ProjectTeam createProject(ProjectCreateDTO projectCreateDTO,Long createdByUserId) {
         
     	// Fetch the user who is creating the project 
