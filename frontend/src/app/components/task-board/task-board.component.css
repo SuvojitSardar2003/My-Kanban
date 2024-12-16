@@ -1,0 +1,167 @@
+.app-container {
+  display: flex;
+  margin-left: 260px;
+  width: calc(100% - 260px);
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.header-text {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.header-text:hover {
+    background-color: #838983;
+    color: white;
+    transform: scale(1.02);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+.header p {
+  color: #888;
+}
+
+.project-info {
+  margin-bottom: 20px;
+}
+
+.status-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.status .circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.red {
+  background-color: red;
+}
+
+.violet {
+  background-color: violet;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.green {
+  background-color: green;
+}
+
+.task-sections {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.task-section {
+  width: 23%;
+  min-height: 100px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-section h3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.task-section button {
+  background-color: #b2bbb2;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.task-section button:hover {
+  background-color: #b2bbb2;
+}
+
+.task-section p {
+  margin: 5px 0;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.task-section p:last-child {
+  border-bottom: none;
+}
+
+.task-box {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+}
+
+.task-box.red {
+  background-color: red !important;
+}
+
+.task-box.violet {
+  background-color: violet;
+}
+
+.task-box.blue {
+  background-color: blue;
+}
+
+.task-box.green {
+  background-color: green;
+}
+
+.status-container .circle.red {
+  background-color: red;
+}
+
+.task-section:nth-child(1),
+.task-section:nth-child(2),
+.task-section:nth-child(3),
+.task-section:nth-child(4) {
+  background-color: #2e2e2e;
+  color: #ffffff;
+}
+
+.centered-snackbar {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  border-radius: 3px;
+  z-index: 1000;
+}
