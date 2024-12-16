@@ -2,12 +2,15 @@ package com.example.demo.service;
 
 import com.example.demo.dto.TaskCreateDTO;
 import com.example.demo.dto.TaskDTO;
+import com.example.demo.dto.TaskDetailsDTO;
 import com.example.demo.model.ProjectTeam;
 import com.example.demo.model.Task;
 import com.example.demo.model.User;
 import com.example.demo.repository.ProjectTeamRepository;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class TaskService {
@@ -59,6 +66,47 @@ public class TaskService {
         logger.info("Creating task: {}", task.getTitle());
         return taskRepository.save(task);
     }
+    
+    public List<TaskDetailsDTO> getProjectDetailsWithTasks(Long userId) {
+        List<TaskDetailsDTO> taskDetailsList = new ArrayList<>();
+
+        
+        List<ProjectTeam> adminProjects = projectTeamRepository.findByAdminId(userId);
+        List<ProjectTeam> memberProjects = projectTeamRepository.findByTeamMemberId(userId);
+        Set<ProjectTeam> allProjects = new HashSet<>(adminProjects);
+        allProjects.addAll(memberProjects);
+
+        for (ProjectTeam project : allProjects) {
+            TaskDetailsDTO taskDetailsDTO = new TaskDetailsDTO();
+            taskDetailsDTO.setId(project.getId());
+            taskDetailsDTO.setName(project.getName());
+            taskDetailsDTO.setDescription(project.getDescription());
+            taskDetailsDTO.setStartDate(project.getStartDate());
+            taskDetailsDTO.setEndDate(project.getEndDate());
+            taskDetailsDTO.setStatus(project.getStatus());
+
+            // Map tasks for the project
+            List<TaskDetailsDTO.TaskDTO> taskDTOs = new ArrayList<>();
+            for (Task task : project.getTasks()) {
+                TaskDetailsDTO.TaskDTO taskDTO = new TaskDetailsDTO.TaskDTO();
+                taskDTO.setId(task.getId());
+                taskDTO.setTitle(task.getTitle());
+                if (task.getAssignedTo() != null) {
+                    taskDTO.setAssignedToId(task.getAssignedTo().getId());
+                }
+                taskDTO.setStatus(task.getStatus());
+                taskDTO.setDueDate(task.getDueDate());
+                taskDTO.setPriority(task.getPriority());
+                taskDTOs.add(taskDTO);
+            }
+            taskDetailsDTO.setTasks(taskDTOs);
+
+            taskDetailsList.add(taskDetailsDTO);
+        }
+
+        return taskDetailsList;
+    }
+
 
     @Transactional
     public TaskDTO updateTask(Long taskId, TaskDTO taskDTO, Long updatedByUserId) {
@@ -133,5 +181,20 @@ public class TaskService {
         taskDTO.setCreatedBy(task.getCreatedBy().getId());
 
         return taskDTO;
+    }
+    public TaskDTO getTaskById(Long taskId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("No task found with ID: " + taskId));
+        return convertToDTO(task); // Convert to DTO before returning
+    }
+    
+    @Transactional 
+    public void deleteTask(Long taskId, Long userId) { 
+    	Task task = taskRepository.findById(taskId) 
+    			.orElseThrow(() -> new EntityNotFoundException("Task not found")); 
+    	if (!task.getCreatedBy().getId().equals(userId)) { 
+    		throw new IllegalArgumentException("User is not authorized to delete this task"); 
+    		} 
+    	taskRepository.delete(task);
     }
 }

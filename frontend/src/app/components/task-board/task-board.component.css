@@ -1,167 +1,131 @@
 .app-container {
   display: flex;
-  margin-left: 260px;
-  width: calc(100% - 260px);
+  height: 100vh;
+  overflow: hidden;
 }
 
 .main-content {
-  flex: 1;
+  flex-grow: 1;
   padding: 20px;
+  background-color: #f4f5f7;
+  overflow-y: auto;
+  margin-left: 250px; /* Adjust based on sidebar width */
+  width: calc(100% - 250px);
 }
 
 .header {
-  font-size: 24px;
-  font-weight: bold;
   margin-bottom: 20px;
 }
 
-.header-text {
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.header-text:hover {
-    background-color: #838983;
-    color: white;
-    transform: scale(1.02);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-.header p {
-  color: #888;
-}
-
-.project-info {
+.project-selector {
   margin-bottom: 20px;
 }
 
-.status-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.status {
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
-}
-
-.status .circle {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.red {
-  background-color: red;
-}
-
-.violet {
-  background-color: violet;
-}
-
-.blue {
-  background-color: blue;
-}
-
-.green {
-  background-color: green;
-}
-
-.task-sections {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  align-items: flex-start;
-}
-
-.task-section {
-  width: 23%;
-  min-height: 100px;
-  border: 1px solid #ddd;
+.project-selector select {
+  width: 100%;
   padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.kanban-board {
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
-.task-section h3 {
+.project-board {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: 20px;
+}
+
+.board-columns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.column {
+  background-color: #f1f2f4;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.column-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.task-section button {
-  background-color: #b2bbb2;
+.add-task-btn {
+  background-color: #0052cc;
   color: white;
   border: none;
-  padding: 5px 10px;
+  border-radius: 4px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
-  border-radius: 3px;
 }
 
-.task-section button:hover {
-  background-color: #b2bbb2;
+.tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.task-section p {
-  margin: 5px 0;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 5px;
-}
-
-.task-section p:last-child {
-  border-bottom: none;
-}
-
-.task-box {
+.task-card {
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  font-size: 14px;
-  color: white;
-  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
-.task-box.red {
-  background-color: red !important;
+.task-card:hover {
+  transform: scale(1.02);
 }
 
-.task-box.violet {
-  background-color: violet;
+.task-content {
+  flex-grow: 1;
+  margin-right: 10px;
 }
 
-.task-box.blue {
-  background-color: blue;
+.task-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8em;
+  color: #5e6c84;
+  margin-top: 5px;
 }
 
-.task-box.green {
-  background-color: green;
+.task-actions {
+  display: flex;
+  gap: 5px;
 }
 
-.status-container .circle.red {
-  background-color: red;
+.edit-btn, .delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px;
 }
 
-.task-section:nth-child(1),
-.task-section:nth-child(2),
-.task-section:nth-child(3),
-.task-section:nth-child(4) {
-  background-color: #2e2e2e;
-  color: #ffffff;
+.priority-high {
+  border-left: 4px solid red;
 }
 
-.centered-snackbar {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #333;
-  color: white;
-  padding: 10px;
-  border-radius: 3px;
-  z-index: 1000;
+.priority-medium {
+  border-left: 4px solid orange;
+}
+
+.priority-low {
+  border-left: 4px solid green;
 }

@@ -10,6 +10,7 @@ import { UpdateTaskComponent } from './components/update-task/update-task.compon
 import { CreateProjectComponent } from './components/create-project/create-project.component';
 import { AddMemberComponent } from './components/add-member/add-member.component';
 import { TaskBoardComponent } from './components/task-board/task-board.component'; 
+import { MyTasksComponent } from './components/my-tasks/my-tasks.component';
 
 export const routes: Routes = [
     {
@@ -60,5 +61,9 @@ export const routes: Routes = [
     {
         path: 'task-board',  
         component: TaskBoardComponent
+    },
+    {
+        path: 'my-tasks',
+        component: MyTasksComponent
     }
 ];

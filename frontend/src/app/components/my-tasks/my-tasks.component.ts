@@ -14,7 +14,7 @@ import { SessionService } from '../../services/session.service';
 import { Task, Project } from '../../model/interface/task-board.model';
 
 @Component({
-  selector: 'app-task-board',
+  selector: 'app-my-tasks',
   standalone: true,
   imports: [
     SidebarComponent,
@@ -32,13 +32,13 @@ import { Task, Project } from '../../model/interface/task-board.model';
       <div class="main-content">
         <div class="header">
           <h1>Hello {{ userProfile?.userName }}</h1>
-          <p>You have {{ projects.length }} projects assigned</p>
+          <p>You have {{ userAssignedProjects.length }} projects with assigned tasks</p>
         </div>
 
         <div class="project-selector">
           <select [(ngModel)]="selectedProject" (change)="onProjectChange()">
-            <option value="all">All Projects</option>
-            <option *ngFor="let project of projects" [value]="project.id">
+            <option value="all">All Assigned Projects</option>
+            <option *ngFor="let project of userAssignedProjects" [value]="project.id">
               {{ project.name }}
             </option>
           </select>
@@ -100,9 +100,9 @@ import { Task, Project } from '../../model/interface/task-board.model';
       </div>
     </div>
   `,
-  styleUrls: ['./task-board.component.css']
+  styleUrls: ['./my-tasks.component.css']
 })
-export class TaskBoardComponent implements OnInit {
+export class MyTasksComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   private http = inject(HttpClient);
@@ -110,7 +110,7 @@ export class TaskBoardComponent implements OnInit {
 
   userProfile: any = {};
   selectedProject: string = 'all';
-  projects: Project[] = [];
+  userAssignedProjects: Project[] = [];
   displayProjects: Project[] = [];
 
   statuses = [
@@ -122,10 +122,10 @@ export class TaskBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.userProfile = this.sessionService.getSession();
-    this.fetchProjects();
+    this.fetchUserAssignedProjects();
   }
 
-  fetchProjects(): void {
+  fetchUserAssignedProjects(): void {
     const session = this.sessionService.getSession();
     if (!session) {
       this.snackBar.open('User not logged in', 'Close', { duration: 2000 });
@@ -137,29 +137,37 @@ export class TaskBoardComponent implements OnInit {
       withCredentials: true
     }).subscribe({
       next: (projects) => {
-        this.projects = projects;
-        this.displayProjects = projects;
+        // Filter projects that have tasks assigned to the current user
+        this.userAssignedProjects = projects.filter(
+          project => project.tasks && project.tasks.some(
+            task => task.assignedToId === userId
+          )
+        );
+        this.displayProjects = this.userAssignedProjects;
       },
       error: (err) => {
-        console.error('Error fetching projects', err);
-        this.snackBar.open('Failed to fetch projects', 'Close', { duration: 2000 });
+        console.error('Error fetching assigned tasks', err);
+        this.snackBar.open('Failed to fetch assigned tasks', 'Close', { duration: 2000 });
       }
     });
   }
 
   onProjectChange(): void {
     if (this.selectedProject === 'all') {
-      this.displayProjects = this.projects;
+      this.displayProjects = this.userAssignedProjects;
     } else {
-      this.displayProjects = this.projects.filter(
+      this.displayProjects = this.userAssignedProjects.filter(
         project => project.id === +this.selectedProject
       );
     }
   }
 
   getTasksByProjectAndStatus(projectId: number, status: string): Task[] {
-    const project = this.projects.find(p => p.id === projectId);
-    return project?.tasks?.filter(task => task.status === status) || [];
+    const project = this.userAssignedProjects.find(p => p.id === projectId);
+    const userId = this.userProfile.userId;
+    return project?.tasks?.filter(
+      task => task.status === status && task.assignedToId === userId
+    ) || [];
   }
 
   getTaskPriorityClass(task: Task): string {
@@ -179,7 +187,7 @@ export class TaskBoardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.fetchProjects(); // Refresh to get updated data
+        this.fetchUserAssignedProjects(); // Refresh to get updated data
         this.snackBar.open('Task Added Successfully', 'Close', { duration: 2000 });
       }
     });
@@ -200,22 +208,20 @@ export class TaskBoardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.fetchProjects(); // Refresh to get updated data
+        this.fetchUserAssignedProjects(); // Refresh to get updated data
         this.snackBar.open('Task Updated Successfully', 'Close', { duration: 2000 });
       }
     });
   }
 
   deleteTask(task: Task): void {
-    // Implement delete task logic
-    // This would typically involve an HTTP call to delete the task
     const confirmDelete = confirm('Are you sure you want to delete this task?');
     if (confirmDelete) {
       this.http.delete(`http://localhost:8080/api/tasks/${task.id}`, {
         withCredentials: true
       }).subscribe({
         next: () => {
-          this.fetchProjects(); // Refresh to get updated data
+          this.fetchUserAssignedProjects(); // Refresh to get updated data
           this.snackBar.open('Task Deleted Successfully', 'Close', { duration: 2000 });
         },
         error: (err) => {
