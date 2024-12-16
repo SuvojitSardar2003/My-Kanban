@@ -24,7 +24,7 @@ public class TeamMemberService {
  private TeamMemberRepository teamMemberRepository;
 
  public boolean deleteTeamMemberByIdAndProjectId(Long id, Long projectId) {
-     TeamMember teamMember = teamMemberRepository.findByIdAndProjectId(id, projectId);
+     TeamMember teamMember = teamMemberRepository.findByIdAndProject_Id(id, projectId);
      if (teamMember != null) {
          teamMemberRepository.delete(teamMember);
          logger.info("Deleted team member with ID {} from project ID {}", id, projectId);
@@ -35,7 +35,7 @@ public class TeamMemberService {
  }
 
  public void deleteAllByProjectId(Long projectId) {
-     List<TeamMember> teamMembers = teamMemberRepository.findByProjectId(projectId);
+     List<TeamMember> teamMembers = teamMemberRepository.findByProject_Id(projectId);
      if (!teamMembers.isEmpty()) {
          teamMemberRepository.deleteAll(teamMembers);
          logger.info("Deleted all team members for project ID {}", projectId);

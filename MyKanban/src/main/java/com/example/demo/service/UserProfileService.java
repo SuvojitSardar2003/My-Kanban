@@ -34,7 +34,7 @@ public class UserProfileService {
         String name = (String) session.getAttribute("userName");
 
         // Retrieve the total projects
-        long totalProjects = teamMemberRepository.countByUserId(userId);
+        long totalProjects = teamMemberRepository.countByUser_Id(userId);
                
 
         // Retrieve the total tasks
