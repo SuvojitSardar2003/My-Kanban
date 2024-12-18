@@ -16,6 +16,40 @@
   .header {
     margin-bottom: 20px;
   }
+
+  .category-legend {
+    display: flex;
+    justify-content: right;
+    gap: 20px;
+    margin-bottom: 20px;
+    /* background-color: white; */
+    padding: 10px;
+    border-radius: 8px;
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+
+  .legend-color.frontend { background-color: #0052cc; }
+  .legend-color.backend { background-color: #5243aa; }
+  .legend-color.bugs { background-color: #ff5630; }
+  .legend-color.integration { background-color: #36b37e; }
+
+  /* Task category coloring */
+  .task-card.category-frontend { border-left: 4px solid #0052cc; }
+  .task-card.category-backend { border-left: 4px solid #5243aa; }
+  .task-card.category-bugs { border-left: 4px solid #ff5630; }
+  .task-card.category-integration { border-left: 4px solid #36b37e; }
   
   .project-selector {
     margin-bottom: 20px;

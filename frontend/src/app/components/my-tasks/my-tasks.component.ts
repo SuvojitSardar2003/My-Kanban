@@ -44,6 +44,26 @@ import { Task, Project } from '../../model/interface/task-board.model';
           </select>
         </div>
 
+        <div class="category-legend">
+          <div class="legend-item">
+            <div class="legend-color frontend"></div>
+            <span>Frontend</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color backend"></div>
+            <span>Backend</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color bugs"></div>
+            <span>Bugs</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color integration"></div>
+            <span>Integration</span>
+          </div>
+        </div>
+
+        
         <div class="kanban-board">
           <ng-container *ngFor="let project of displayProjects">
             <div class="project-board">
