@@ -100,8 +100,8 @@ interface TaskDetail {
             >
               <option value="Backend">Backend</option>
               <option value="Frontend">Frontend</option>
-              <option value="Design">Design</option>
-              <option value="Testing">Testing</option>
+              <option value="Bugs">Bugs</option>
+              <option value="Integration">Integration</option>
             </select>
           </div>
 

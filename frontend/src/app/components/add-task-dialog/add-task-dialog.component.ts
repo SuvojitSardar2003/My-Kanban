@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core'; // Correct import
+import { MatNativeDateModule } from '@angular/material/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -31,7 +31,7 @@ import { SessionService } from '../../services/session.service';
 export class AddTaskBoardDialogComponent implements OnInit {
   newTask = {
     projectId: null,
-    assignedToId: null as number | null, // Update the type here
+    assignedToId: null as number | null,
     title: '',
     description: '',
     dueDate: '',
@@ -41,20 +41,22 @@ export class AddTaskBoardDialogComponent implements OnInit {
   };
   teamMembers: any[] = [];
   projects: any[] = [];
+  isStatusDisabled: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddTaskBoardDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, // Directly using data object
-    private http: HttpClient, // Inject HttpClient
-    private router: Router, // Inject Router
-    private sessionService: SessionService // Inject SessionService
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private http: HttpClient,
+    private router: Router,
+    private sessionService: SessionService
   ) {}
 
   ngOnInit(): void {
-    this.newTask.projectId = this.data.projectId; // Ensure projectId is assigned
+    this.newTask.projectId = this.data.projectId;
+    this.newTask.status = this.data.status;
+    this.isStatusDisabled = true; // Disable the status field
 
     this.fetchProjects();
-    this.setInitialStatus();
   }
 
   fetchProjects(): void {
@@ -86,25 +88,6 @@ export class AddTaskBoardDialogComponent implements OnInit {
     }
   }
 
-  setInitialStatus(): void {
-    switch (this.data.status) {
-      case 'To Do':
-        this.newTask.status = 'TODO';
-        break;
-      case 'In Progress':
-        this.newTask.status = 'IN_PROGRESS';
-        break;
-      case 'In Review':
-        this.newTask.status = 'IN_REVIEW';
-        break;
-      case 'Done':
-        this.newTask.status = 'DONE';
-        break;
-      default:
-        this.newTask.status = 'TODO';
-    }
-  }
-
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -114,26 +97,19 @@ export class AddTaskBoardDialogComponent implements OnInit {
       const httpOptions = {
         withCredentials: true
       };
-      // Convert assignedToId to number
       this.newTask.assignedToId = Number(this.newTask.assignedToId);
-
-      // Map priority values to match backend API
       this.newTask.priority = this.newTask.priority.toUpperCase();
-      // Use let instead of const
-    let date = new Date(this.newTask.dueDate);
-    
-    // If just a date is provided, set time to end of day
-    if (!(date instanceof Date) || isNaN(date.getTime())) {
-      date = new Date(this.newTask.dueDate + 'T23:59:59');
-    }
-    
-    // Convert to ISO string and trim to match backend expectation
-    this.newTask.dueDate = date.toISOString().slice(0, 19);
+      let date = new Date(this.newTask.dueDate);
 
-      // Ensure projectId is included
+      if (!(date instanceof Date) || isNaN(date.getTime())) {
+        date = new Date(this.newTask.dueDate + 'T23:59:59');
+      }
+
+      this.newTask.dueDate = date.toISOString().slice(0, 19);
+
       const taskPayload = { ...this.newTask };
 
-      console.log('Submitting Task:', taskPayload); // Log the payload
+      console.log('Submitting Task:', taskPayload);
 
       this.http.post('http://localhost:8080/api/tasks', taskPayload).subscribe(
         response => {

@@ -1,8 +1,6 @@
 <h2 class="dialog-title">New Task</h2>
 <div class="dialog-container">
   <form (ngSubmit)="submitTask()">
-
-
     <div class="form-group">
       <label for="title">Please enter the title!</label>
       <input id="title" type="text" [(ngModel)]="newTask.title" name="title" required />
@@ -16,17 +14,17 @@
     <div class="form-group">
       <label for="category">Category</label>
       <select id="category" [(ngModel)]="newTask.category" name="category" required>
-        <option value="Bug">Bug</option>
+        <option value="Bugs">Bugs</option>
         <option value="Backend">Backend</option>
         <option value="Frontend">Frontend</option>
-        <option value="Inspection">Inspection</option>
+        <option value="Integration">Integration</option>
       </select>
     </div>
 
     <div class="form-group">
       <label for="dueDate">Please enter due date</label>
       <input id="dueDate" type="datetime-local" [(ngModel)]="newTask.dueDate" name="dueDate" required />
-      </div>
+    </div>
 
     <div class="form-group">
       <label for="priority">Priority</label>
@@ -40,16 +38,16 @@
     <div class="form-group">
       <label for="assignedTo">Assign to</label>
       <select id="assignedTo" [(ngModel)]="newTask.assignedToId" name="assignedTo" required>
-          <option *ngFor="let member of teamMembers" [value]="member.userId">{{ member.email }}</option>
+        <option *ngFor="let member of teamMembers" [value]="member.userId">{{ member.email }}</option>
       </select>
-  </div>
-  
+    </div>
+
     <div class="form-group">
       <label for="status">Status</label>
-      <select id="status" [(ngModel)]="newTask.status" name="status" required>
+      <select id="status" [(ngModel)]="newTask.status" name="status" required [disabled]="isStatusDisabled">
         <option value="TODO">To Do</option>
         <option value="IN_PROGRESS">In Progress</option>
-        <option value="IN_REVIEW">In Review</option>
+        <option value="REVIEW">Review</option>
         <option value="DONE">Done</option>
       </select>
     </div>
