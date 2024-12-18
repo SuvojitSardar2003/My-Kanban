@@ -41,7 +41,7 @@ public class UserProfileService {
         long totalTasks = taskRepository.countByAssignedToId(userId);
 
         // Retrieve the total active and done tasks
-        long totalActiveTasks = taskRepository.countByAssignedToIdAndStatus(userId, "Active");
+        long totalActiveTasks = taskRepository.countByAssignedToIdAndStatus(userId, "IN_PROGRESS");
         long totalDoneTasks = taskRepository.countByAssignedToIdAndStatus(userId, "DONE");
 
         // Return the aggregated profile data
