@@ -3,21 +3,22 @@ package com.example.demo.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.service.TeamMemberService;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-
 @RestController
 @RequestMapping("/api/team-members")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class TeamMemberController {
-    @Autowired
-    private TeamMemberService teamMemberService;
+    private final TeamMemberService teamMemberService;
+
+    public TeamMemberController(TeamMemberService teamMemberService) {
+        this.teamMemberService = teamMemberService;
+    }
 
     @DeleteMapping("/{id}/project/{projectId}")
     public ResponseEntity<Map<String, Object>> deleteTeamMember(@PathVariable Long id, @PathVariable Long projectId) {
@@ -42,7 +43,6 @@ public class TeamMemberController {
         }
     }
 
-
     @DeleteMapping("/project/{projectId}")
     public ResponseEntity<Map<String, Object>> deleteAllByProjectId(@PathVariable Long projectId) {
         Map<String, Object> response = new HashMap<>();
@@ -56,5 +56,4 @@ public class TeamMemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
 }

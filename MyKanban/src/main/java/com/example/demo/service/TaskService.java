@@ -110,9 +110,6 @@ public class TaskService {
 
     @Transactional
     public TaskDTO updateTask(Long taskId, TaskDTO taskDTO, Long updatedByUserId) {
-        User updatedBy = userRepository.findById(updatedByUserId)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + updatedByUserId));
-
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found with ID: " + taskId));
 

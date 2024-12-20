@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpSession;
 
 import com.example.demo.dto.UserProfileDTO;
-import com.example.demo.repository.ProjectTeamRepository;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.TeamMemberRepository;
 
@@ -19,9 +18,6 @@ public class UserProfileService {
     @Autowired
     private TaskRepository taskRepository;
     
-    @Autowired
-    private ProjectTeamRepository projectTeamRepository;
-
     public UserProfileDTO getUserProfile(HttpSession session) {
         // Retrieve the userId from the session
         Long userId = (Long) session.getAttribute("userId");

@@ -3,8 +3,6 @@ package com.example.demo.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.demo.model.User;
-
 public class TaskDetailsDTO {
 
     private Long id; // Project ID
