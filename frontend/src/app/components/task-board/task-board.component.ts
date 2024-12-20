@@ -82,7 +82,8 @@ import { Task, Project } from '../../model/interface/task-board.model';
                     <div 
                       *ngFor="let task of getTasksByProjectAndStatus(project.id, status.value)"
                       class="task-card"
-                      [ngClass]="getTaskPriorityClass(task)"
+                      [ngClass]="[getTaskCategoryClass(task), getTaskPriorityClass(task)]"
+
                     >
                       <div class="task-content" (click)="openTaskDetails(task)">
                         <h4>{{ task.title }}</h4>
@@ -180,6 +181,17 @@ export class TaskBoardComponent implements OnInit {
     const project = this.projects.find(p => p.id === projectId);
     return project?.tasks?.filter(task => task.status === status) || [];
   }
+
+  getTaskCategoryClass(task: Task): string {
+    switch (task.category) {
+      case 'Frontend': return 'category-frontend';
+      case 'Backend': return 'category-backend';
+      case 'Bugs': return 'category-bugs';
+      case 'Integration': return 'category-integration';
+      default: return '';
+    }
+  }
+  
 
   getTaskPriorityClass(task: Task): string {
     switch (task.priority) {

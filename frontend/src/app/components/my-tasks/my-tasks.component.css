@@ -40,17 +40,12 @@
     border-radius: 50%;
   }
 
-  .legend-color.frontend { background-color: #0052cc; }
-  .legend-color.backend { background-color: #5243aa; }
-  .legend-color.bugs { background-color: #ff5630; }
-  .legend-color.integration { background-color: #36b37e; }
+/* Legend colors to match task category backgrounds */
+.legend-color.frontend { background-color: #6fa3ef; } /* Vibrant blue */
+.legend-color.backend { background-color: #9b7bba; } /* Vibrant purple */
+.legend-color.bugs { background-color: #ff8a65; } /* Vibrant red */
+.legend-color.integration { background-color: #7fc97f; } /* Vibrant green */
 
-  /* Task category coloring */
-  .task-card.category-frontend { border-left: 4px solid #0052cc; }
-  .task-card.category-backend { border-left: 4px solid #5243aa; }
-  .task-card.category-bugs { border-left: 4px solid #ff5630; }
-  .task-card.category-integration { border-left: 4px solid #36b37e; }
-  
   .project-selector {
     margin-bottom: 20px;
   }
@@ -152,14 +147,8 @@
     padding: 5px;
   }
   
-  .priority-high {
-    border-left: 4px solid red;
-  }
-  
-  .priority-medium {
-    border-left: 4px solid orange;
-  }
-  
-  .priority-low {
-    border-left: 4px solid green;
-  }
+/* Task category background coloring */
+.task-card.category-frontend { background-color: #6fa3ef; } /* Vibrant blue */
+.task-card.category-backend { background-color: #9b7bba; } /* Vibrant purple */
+.task-card.category-bugs { background-color: #ff8a65; } /* Vibrant red */
+.task-card.category-integration { background-color: #7fc97f; } /* Vibrant green */

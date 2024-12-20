@@ -6,7 +6,7 @@ export interface Task {
     dueDate: string;
     priority: string;
     assignedToId: number;
-    type?: string; // Optional property for task type (category)
+    category: string; // Optional property for task type (category)
   }
   
   export interface Project {

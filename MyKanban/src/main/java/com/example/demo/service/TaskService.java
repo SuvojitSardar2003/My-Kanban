@@ -97,6 +97,7 @@ public class TaskService {
                 taskDTO.setStatus(task.getStatus());
                 taskDTO.setDueDate(task.getDueDate());
                 taskDTO.setPriority(task.getPriority());
+                taskDTO.setCategory(task.getCategory());
                 taskDTOs.add(taskDTO);
             }
             taskDetailsDTO.setTasks(taskDTOs);

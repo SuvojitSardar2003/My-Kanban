@@ -78,6 +78,7 @@ public class TaskDetailsDTO {
         private LocalDateTime dueDate;
         private String priority;
         private Long assignedToId;
+        private String category;
 
         // Getter and Setter methods for task DTO fields
         public Long getId() {
@@ -126,5 +127,12 @@ public class TaskDetailsDTO {
         public void setPriority(String priority) {
             this.priority = priority;
         }
+        
+        public String getCategory() {
+        	return category; 
+        	} 
+        public void setCategory(String category) { 
+        	this.category = category; 
+        	}
     }
 }
