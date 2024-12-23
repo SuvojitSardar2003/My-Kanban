@@ -22,7 +22,7 @@ export class SidebarComponent {
 
       this.sessionService.clearSession();
       
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
     }
   }
 

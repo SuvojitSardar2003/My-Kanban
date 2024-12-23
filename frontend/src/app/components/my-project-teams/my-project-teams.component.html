@@ -27,13 +27,24 @@
   </div>
 </div>
 
-<!-- Modal Dialog for Delete Confirmation -->
+<!-- Modal Dialog for Project Delete Confirmation -->
 <div *ngIf="showDeleteModal" class="modal-overlay">
   <div class="modal-content">
     <p>Do you really want to delete this project?</p>
     <div class="modal-actions">
       <button (click)="confirmDelete()" class="yes-button">Yes</button>
       <button (click)="cancelDelete()" class="no-button">No</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Dialog for Member Delete Confirmation -->
+<div *ngIf="showDeleteMemberModal" class="modal-overlay">
+  <div class="modal-content">
+    <p>Do you really want to delete this team member?</p>
+    <div class="modal-actions">
+      <button (click)="confirmDeleteMember()" class="yes-button">Yes</button>
+      <button (click)="cancelDeleteMember()" class="no-button">No</button>
     </div>
   </div>
 </div>

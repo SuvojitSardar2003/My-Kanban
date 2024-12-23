@@ -16,7 +16,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-my-project-team',
   standalone: true,
-  imports: [SidebarComponent, MatDialogModule,CommonModule,MatSnackBarModule], // Import MatDialogModule here
+  imports: [SidebarComponent, MatDialogModule, CommonModule, MatSnackBarModule], // Import MatDialogModule here
   templateUrl: './my-project-teams.component.html',
   styleUrls: ['./my-project-teams.component.css']
 })
@@ -24,8 +24,9 @@ export class MyProjectTeamComponent implements OnInit {
   projects: any[] = [];
   showDeleteModal: boolean = false;
   projectToDelete: number | null = null;
+  showDeleteMemberModal: boolean = false;
+  memberToDelete: { projectId: number, memberId: number } | null = null;
 
-  
   private http = inject(HttpClient);
   private sessionService = inject(SessionService);
   private router = inject(Router); // Inject Router service
@@ -69,8 +70,8 @@ export class MyProjectTeamComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((newProject) => {
       if (newProject) {
-            console.log('Project created successfully');
-            this.fetchProjects();
+        console.log('Project created successfully');
+        this.fetchProjects();
       }
     });
   }
@@ -85,8 +86,8 @@ export class MyProjectTeamComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe((updatedProject) => {
         if (updatedProject) {
-              console.log('Project updated successfully');
-              this.fetchProjects();
+          console.log('Project updated successfully');
+          this.fetchProjects();
         }
       });
     }
@@ -97,40 +98,53 @@ export class MyProjectTeamComponent implements OnInit {
       width: '400px',
       data: { projectId: project.id, name: project.name }
     });
-  
+
     dialogRef.afterClosed().subscribe((newMember) => {
       if (newMember) {
-            console.log('Member added successfully');
-            this.fetchProjects();
+        console.log('Member added successfully');
+        this.fetchProjects();
       }
     });
   }
-  
 
   deleteMember(projectId: number, memberId: number): void {
-    this.http.delete(`${this.memberApiUrl}/${memberId}/project/${projectId}`).subscribe({
-      next: () => {
-        console.log('Member deleted successfully');
-        this.snackBar.open('Member deleted successfully', 'Close', { duration: 3000, panelClass: ['success-snackbar'] });
-        this.fetchProjects();
-      },
-      error: (err) => {
-        console.error('Error deleting member', err);
-        let errorMessage = 'Error deleting member.';
-  
-        if (err.status === 403) {
-          errorMessage = 'You do not have permission to delete this member.';
-        } else if (err.status === 404) {
-          errorMessage = 'Member not found or does not belong to the project.';
-        } else if (err.status === 500) {
-          errorMessage = 'Server error occurred. Please try again later.';
-        }
-  
-        this.snackBar.open(errorMessage, 'Close', { duration: 5000, panelClass: ['error-snackbar'] });
-      }
-    });
+    this.showDeleteMemberModal = true;
+    this.memberToDelete = { projectId, memberId };
   }
-  
+
+  confirmDeleteMember(): void {
+    if (this.memberToDelete !== null) {
+      const { projectId, memberId } = this.memberToDelete;
+
+      this.http.delete(`${this.memberApiUrl}/${memberId}/project/${projectId}`).subscribe({
+        next: () => {
+          console.log('Member deleted successfully');
+          this.snackBar.open('Member deleted successfully', 'Close', { duration: 3000, panelClass: ['success-snackbar'] });
+          this.fetchProjects();
+          this.cancelDeleteMember();
+        },
+        error: (err) => {
+          console.error('Error deleting member', err);
+          let errorMessage = 'Error deleting member.';
+
+          if (err.status === 403) {
+            errorMessage = 'You do not have permission to delete this member.';
+          } else if (err.status === 404) {
+            errorMessage = 'Member not found or does not belong to the project.';
+          } else if (err.status === 500) {
+            errorMessage = 'Server error occurred. Please try again later.';
+          }
+
+          this.snackBar.open(errorMessage, 'Close', { duration: 5000, panelClass: ['error-snackbar'] });
+        }
+      });
+    }
+  }
+
+  cancelDeleteMember(): void {
+    this.showDeleteMemberModal = false;
+    this.memberToDelete = null;
+  }
 
   onDelete(projectId: number): void {
     this.showDeleteModal = true;
@@ -160,7 +174,6 @@ export class MyProjectTeamComponent implements OnInit {
       });
     }
   }
-  
 
   cancelDelete(): void {
     this.showDeleteModal = false;
