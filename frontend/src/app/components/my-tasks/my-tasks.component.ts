@@ -21,104 +21,83 @@ import { Task, Project } from '../../model/interface/task-board.model';
     MatDialogModule,
     CommonModule,
     MatSnackBarModule,
-    AddTaskBoardDialogComponent,
-    TaskDetailsDialogComponent,
-    EditTaskDialogComponent,
     FormsModule,
   ],
   template: `
     <div class="app-container">
-      <app-sidebar></app-sidebar>
-      <div class="main-content">
-        <div class="header">
-          <h1>Hello {{ userProfile?.userName }}</h1>
+  <app-sidebar></app-sidebar>
+  <div class="main-content">
+    <div class="header">
+      <div class="header-content">
+        <div class="greeting">
+          <h1>Hello, {{ userProfile?.userName }}</h1>
           <p>You have {{ userAssignedProjects.length }} projects with assigned tasks</p>
         </div>
-
         <div class="project-selector">
           <select [(ngModel)]="selectedProject" (change)="onProjectChange()">
             <option value="all">All Assigned Projects</option>
-            <option *ngFor="let project of userAssignedProjects" [value]="project.id">
-              {{ project.name }}
-            </option>
+            <option *ngFor="let project of userAssignedProjects" [value]="project.id">{{ project.name }}</option>
           </select>
         </div>
+      </div>
+    </div>
 
-        <div class="category-legend">
-          <div class="legend-item">
-            <div class="legend-color frontend"></div>
-            <span>Frontend</span>
-          </div>
-          <div class="legend-item">
-            <div class="legend-color backend"></div>
-            <span>Backend</span>
-          </div>
-          <div class="legend-item">
-            <div class="legend-color bugs"></div>
-            <span>Bugs</span>
-          </div>
-          <div class="legend-item">
-            <div class="legend-color integration"></div>
-            <span>Integration</span>
-          </div>
-        </div>
+    <div class="category-legend">
+      <div class="legend-item">
+        <div class="legend-color frontend"></div>
+        <span>Frontend</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color backend"></div>
+        <span>Backend</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color bugs"></div>
+        <span>Bugs</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color integration"></div>
+        <span>Integration</span>
+      </div>
+    </div>
 
-        
-        <div class="kanban-board">
-          <ng-container *ngFor="let project of displayProjects">
-            <div class="project-board">
-              <h2>{{ project.name }}</h2>
-              <div class="board-columns">
-                <div class="column" *ngFor="let status of statuses">
-                  <div class="column-header">
-                    <h3>{{ status.label }}</h3>
-                    <button 
-                      class="add-task-btn" 
-                      (click)="addTask(project.id, status.value)"
-                    >
-                      +
-                    </button>
-                  </div>
-                  <div class="tasks-container">
-                    <div 
-                      *ngFor="let task of getTasksByProjectAndStatus(project.id, status.value)"
-                      class="task-card"
-                      [ngClass]="[getTaskCategoryClass(task), getTaskPriorityClass(task)]"
-                    >
-                      <div class="task-content" (click)="openTaskDetails(task)">
-                        <h4>{{ task.title }}</h4>
-                        <div class="task-meta">
-                          <span class="due-date">
-                            Due: {{ task.dueDate | date:'shortDate' }}
-                          </span>
-                          <span class="priority">
-                            {{ task.priority }}
-                          </span>
-                        </div>
-                      </div>
-                      <div class="task-actions">
-                        <button 
-                          class="edit-btn" 
-                          (click)="editTask(task)"
-                        >
-                          ✏️
-                        </button>
-                        <button 
-                          class="delete-btn" 
-                          (click)="deleteTask(task)"
-                        >
-                          🗑️
-                        </button>
-                      </div>
+    <div class="kanban-board">
+      <ng-container *ngFor="let project of displayProjects">
+        <div class="project-board">
+          <h2>{{ project.name }}</h2>
+          <div class="board-columns">
+            <div class="column" *ngFor="let status of statuses">
+              <div class="column-header">
+                <h3>{{ status.label }}</h3>
+                <button class="add-task-btn" (click)="addTask(project.id, status.value)">+</button>
+              </div>
+              <div class="tasks-container">
+                <div 
+                  *ngFor="let task of getTasksByProjectAndStatus(project.id, status.value)"
+                  class="task-card"
+                  [ngClass]="[getTaskCategoryClass(task), getTaskPriorityClass(task)]"
+                >
+                  <div class="task-content" (click)="openTaskDetails(task)">
+                    <h4>{{ task.title }}</h4>
+                    <div class="task-meta">
+                      <span class="due-date">Due: {{ task.dueDate | date:'shortDate' }}</span>
+                      <span class="priority">{{ task.priority }}</span>
                     </div>
+                  </div>
+                  <div class="task-actions">
+                    <button class="edit-btn" (click)="editTask(task)">✏️</button>
+                    <button class="delete-btn" (click)="deleteTask(task)">🗑️</button>
                   </div>
                 </div>
               </div>
             </div>
-          </ng-container>
+          </div>
         </div>
-      </div>
+      </ng-container>
     </div>
+  </div>
+</div>
+
   `,
   styleUrls: ['./my-tasks.component.css']
 })
