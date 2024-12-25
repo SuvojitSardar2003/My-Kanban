@@ -1,5 +1,5 @@
 // my-kanban.component.ts
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -8,9 +8,9 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './my-kanban.component.html',
-  styleUrl: './my-kanban.component.css'
+  styleUrls: ['./my-kanban.component.css']
 })
-export class MyKanbanComponent {
+export class MyKanbanComponent implements AfterViewInit {
   features = [
     {
       icon: '📋',
@@ -33,4 +33,19 @@ export class MyKanbanComponent {
       description: 'Set and adjust task priorities to stay focused on what matters most'
     }
   ];
+
+  ngAfterViewInit() {
+    // Add scroll animation
+    window.addEventListener('scroll', () => {
+      const featureItems = document.querySelectorAll('.feature-item');
+      featureItems.forEach(item => {
+        const rect = item.getBoundingClientRect();
+        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+          item.classList.add('in-view');
+        } else {
+          item.classList.remove('in-view');
+        }
+      });
+    });
+  }
 }
